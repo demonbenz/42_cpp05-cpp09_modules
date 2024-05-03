@@ -4,30 +4,34 @@
 
 #include <iostream>
 #include <stack>
+#include <list>
 
 template <typename T>
 class MutantStack :public std::stack<T>
 {
 private:
 public:
-	MutantStack();
-	~MutantStack();
+	MutantStack<T>(){}
+	~MutantStack<T>(){}
 	
 	//function member
 	typedef typename std::stack<T>::container_type::iterator iterator;
+
 	iterator begin()
 	{
 		return (this->c.begin());
 	}
+
 	iterator end()
 	{
 		return (this->c.end());
 	}
-	MutantStack (const MutantStack& rhs)
+
+	MutantStack<T> (const MutantStack<T> & rhs)
 	{
 		*this = rhs;
 	}
-	MutantStack & operator=(const MutantStack & rhs)
+	MutantStack<T> & operator=(const MutantStack<T> & rhs)
 	{
 		if (this != &rhs)
 		{
@@ -38,11 +42,4 @@ public:
 
 };
 
-// std::ostream & operator<<(std::ostream & o, const Span & rhs);
 #endif
-
-template <typename T>
-MutantStack<T>::MutantStack(){}
-
-template <typename T>
-MutantStack<T>::~MutantStack(){}
