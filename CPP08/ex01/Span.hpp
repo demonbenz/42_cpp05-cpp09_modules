@@ -9,6 +9,7 @@
 #include <vector>
 #include <algorithm>
 #include <exception>
+#include <ctime>
 
 class Span
 {
@@ -29,6 +30,7 @@ public:
 	int shortestSpan();
 	int longestSpan();
 	std::string toString() const;
+	Span & fillSpan();
 	
 	// getter setter
 	void setData(const unsigned int index, int value);

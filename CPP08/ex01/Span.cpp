@@ -103,3 +103,13 @@ unsigned int Span::getSize()
 {
 	return this->_maxSize;
 }
+
+
+Span & Span::fillSpan()
+{
+    std::srand(time(0));
+    unsigned int size = this->getSize();
+    for (unsigned int i = 0; i < size ; i++)
+        this->addNumber(std::rand() % size);
+		return(*this);
+}
