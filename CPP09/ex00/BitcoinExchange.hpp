@@ -10,4 +10,13 @@
 std::map<std::string, double> Btc;
 std::map<std::string, double> Wallet;
 
+class Bitcoin :public std::map<std::string, double>
+{
+private:
+public:
+	Bitcoin();
+	~Bitcoin();
+	//function member
+};
+
 #endif
