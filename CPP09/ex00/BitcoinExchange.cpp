@@ -20,23 +20,19 @@ Bitcoin & Bitcoin::openAndReadCsvFile(const char * fileName, char delim)
 			else
 			{
 				getline(inF, line);
-				// try
-				// {
-					found = line.find(delim);
-					if ((found == std::string::npos) && (line != ""))
-						throw std::runtime_error("bad input. (,)");
-					date = line.substr(0, found);
-					date = trim(date);
-					// std::cout << "key date =<" << date << ">";
-					// checkValidDate(date);
-					number =  std::strtod((line.substr(found + 1)).c_str(), NULL);
-					// std::cout << ", value = <" << number << ">" << std::endl;	
-					setKeyValue(date, number);
-				// }
-				// catch(std::exception & e)
-				// {
-				// 	std::cout << "Error: " << e.what() <<std::endl;
-				// }	
+					if (line != "")
+					{
+						found = line.find(delim);
+						if ((found == std::string::npos) && (line != ""))
+							throw std::runtime_error("bad input. (,)");
+						date = line.substr(0, found);
+						date = trim(date);
+						// std::cout << "key date =<" << date << ">";
+						//checkValidDate(date);
+						number =  std::strtod((line.substr(found + 1)).c_str(), NULL);
+						// std::cout << ", value = <" << number << ">" << std::endl;	
+						setKeyValue(date, number);
+					}
 			}
 		}
 		inF.close();
@@ -70,19 +66,24 @@ Bitcoin & Bitcoin::openAndReadWallet(const char * fileName, char delim)
 				getline(inF, line);
 				try
 				{
-					found = line.find(delim);
-					if (found == std::string::npos && (line != ""))
-						throw std::runtime_error("bad input => ");
-					date = line.substr(0, found);
-					date = trim(date);
-					// checkValidDate(date);
-					rawNumber = line.substr(found + 1);
-					checkIsNumber(rawNumber);	
-					number =  std::strtod(rawNumber.c_str(), NULL);
-					checkFormatValue(number);
-					if (date != "")
+					if (line != "")
 					{
-						std::cout << date << " => " << number << " = " << (number * getValue(date)) << std::endl;
+						found = line.find(delim);
+						if (found == std::string::npos && (line != ""))
+							throw std::runtime_error("bad input => ");
+						date = line.substr(0, found);
+						date = trim(date);
+						//std::cout << "trimDate =" << date;
+						checkValidDate(date);
+						rawNumber = line.substr(found + 1);
+						checkIsNumber(rawNumber);	
+						number =  std::strtod(rawNumber.c_str(), NULL);
+						checkFormatValue(number);
+						if (date != "")
+						{
+							std::cout << date << " => " << number << " = " 
+							<< (number * getValue(date)) << std::endl;
+						}
 					}
 				}
 				catch(std::exception & e)
@@ -166,8 +167,33 @@ void	Bitcoin::checkFormatValue(const double & number) const
 
 void	Bitcoin::checkValidDate(const std::string & date)const
 {
-	(void)date;
 	// checkFormatDate(date);
-	// checkCalendarDate(date);
-}
+	if (date.size() != 10)
+	{
+		throw std::out_of_range("date format error.(size)");
+	}
+	if (date[4] != '-' || date[7] != '-')
+		throw std::out_of_range("date format error.(-)");
 
+	std::string yearStr = date.substr(0, 4);
+	std::string monthStr = date.substr(5, 2);
+	std::string dayStr = date.substr(8, 2);
+	char * end;
+	
+	int year = std::strtol(yearStr.c_str(),&end,10);
+	if (*end != '\0' || year < 2009)
+		throw std::out_of_range("date format error.(year)");
+
+	int month = std::strtol(monthStr.c_str(),&end,10);
+	if (*end != '\0' || month < 1 || month > 12)
+		throw std::out_of_range("date format error.(month)");
+
+	int day = std::strtol(dayStr.c_str(),&end,10);
+	if (*end != '\0' || day < 1 || day > 31)
+		throw std::out_of_range("date format error.(day)");
+	
+	// checkCalendarDate(date);
+	int daysInMonth[] = {31, 28 + (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    if (day > daysInMonth[month - 1])
+        throw std::out_of_range("date format error.(not in carlendar)");
+}
