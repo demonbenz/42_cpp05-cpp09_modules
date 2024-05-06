@@ -20,8 +20,8 @@ Bitcoin & Bitcoin::openAndReadCsvFile(const char * fileName, char delim)
 			else
 			{
 				getline(inF, line);
-				try
-				{
+				// try
+				// {
 					found = line.find(delim);
 					if ((found == std::string::npos) && (line != ""))
 						throw std::runtime_error("bad input. (,)");
@@ -32,11 +32,11 @@ Bitcoin & Bitcoin::openAndReadCsvFile(const char * fileName, char delim)
 					number =  std::strtod((line.substr(found + 1)).c_str(), NULL);
 					// std::cout << ", value = <" << number << ">" << std::endl;	
 					setKeyValue(date, number);
-				}
-				catch(std::exception & e)
-				{
-					std::cout << "Error: " << e.what() <<std::endl;
-				}	
+				// }
+				// catch(std::exception & e)
+				// {
+				// 	std::cout << "Error: " << e.what() <<std::endl;
+				// }	
 			}
 		}
 		inF.close();
@@ -52,6 +52,7 @@ Bitcoin & Bitcoin::openAndReadWallet(const char * fileName, char delim)
 {
 	std::ifstream	inF;
 	std::string		date;
+	std::string 	rawNumber;
 	double 			number;
 	std::string 	line;
 	size_t			found;
@@ -74,11 +75,15 @@ Bitcoin & Bitcoin::openAndReadWallet(const char * fileName, char delim)
 						throw std::runtime_error("bad input => ");
 					date = line.substr(0, found);
 					date = trim(date);
-					// checkFormatDate(date);
 					// checkValidDate(date);
-					number =  std::strtod((line.substr(found + 1)).c_str(), NULL);
-					checkFormatValue(number);	
-					std::cout << date << " => " << number << " = " << (number * getValue(date)) << std::endl;
+					rawNumber = line.substr(found + 1);
+					checkIsNumber(rawNumber);	
+					number =  std::strtod(rawNumber.c_str(), NULL);
+					checkFormatValue(number);
+					if (date != "")
+					{
+						std::cout << date << " => " << number << " = " << (number * getValue(date)) << std::endl;
+					}
 				}
 				catch(std::exception & e)
 				{
@@ -142,6 +147,15 @@ double Bitcoin::getValue(const std::string & date)const
 	}
 }
 
+void 	Bitcoin::checkIsNumber(const std::string & rawNumber)const
+{
+	std::istringstream iss(rawNumber);
+	double num;
+	iss >> num;
+	if(iss.fail())
+		throw std::out_of_range("value is not number.");
+}
+
 void	Bitcoin::checkFormatValue(const double & number) const
 {
 	if (number > MAX_INT)
@@ -149,3 +163,11 @@ void	Bitcoin::checkFormatValue(const double & number) const
 	if (number < 0)
 		throw std::out_of_range("not a positive number.");
 }
+
+void	Bitcoin::checkValidDate(const std::string & date)const
+{
+	(void)date;
+	// checkFormatDate(date);
+	// checkCalendarDate(date);
+}
+

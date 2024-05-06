@@ -10,6 +10,7 @@
 #include <map>
 #include <cctype>
 #include <algorithm>
+#include <sstream>
 
 std::string& ltrim(std::string &str);
 std::string& rtrim(std::string &str);
@@ -30,6 +31,8 @@ public:
 	void setKeyValue(const std::string & date, double number);
 	double getValue(const std::string & date)const;
 
+	void 	checkIsNumber(const std::string & rawNumber)const;
+	void	checkValidDate(const std::string & date) const;
 	void	checkFormatValue(const double & number) const;
 	void	printMap();
 };
