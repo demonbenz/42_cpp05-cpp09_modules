@@ -5,7 +5,6 @@
 int main(int argc, char *argv[])
 {
 	Bitcoin btc;
-	//Bitcoin wallet;
 
 	if(argc != 2)
 	{

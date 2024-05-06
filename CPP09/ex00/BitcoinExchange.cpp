@@ -24,21 +24,19 @@ Bitcoin & Bitcoin::openAndReadCsvFile(const char * fileName, char delim)
 				{
 					found = line.find(delim);
 					if ((found == std::string::npos) && (line != ""))
-						throw std::runtime_error(" bad input. (,)");
+						throw std::runtime_error("bad input. (,)");
 					date = line.substr(0, found);
 					date = trim(date);
 					// std::cout << "key date =<" << date << ">";
 					// checkValidDate(date);
 					number =  std::strtod((line.substr(found + 1)).c_str(), NULL);
-					// std::cout << ", value = <" << number << ">" << std::endl;
-					
+					// std::cout << ", value = <" << number << ">" << std::endl;	
 					setKeyValue(date, number);
 				}
 				catch(std::exception & e)
 				{
-					std::cout << "Error :" << e.what() <<std::endl;
-				}
-				
+					std::cout << "Error: " << e.what() <<std::endl;
+				}	
 			}
 		}
 		inF.close();
@@ -73,17 +71,18 @@ Bitcoin & Bitcoin::openAndReadWallet(const char * fileName, char delim)
 				{
 					found = line.find(delim);
 					if (found == std::string::npos && (line != ""))
-						throw std::runtime_error(" bad input => ");
+						throw std::runtime_error("bad input => ");
 					date = line.substr(0, found);
 					date = trim(date);
+					// checkFormatDate(date);
 					// checkValidDate(date);
 					number =  std::strtod((line.substr(found + 1)).c_str(), NULL);
-					
-					std::cout << date << " => " << number << " = " << number * getValue(date) << std::endl;
+					checkFormatValue(number);	
+					std::cout << date << " => " << number << " = " << (number * getValue(date)) << std::endl;
 				}
 				catch(std::exception & e)
 				{
-					std::cout << "Error :" << e.what() <<std::endl;
+					std::cout << "Error: " << e.what() <<std::endl;
 				}
 			}
 		}
@@ -125,13 +124,28 @@ void Bitcoin::setKeyValue(const std::string & date, double number)
 	bit.insert(std::pair<std::string, double>(date, number));
 }
 double Bitcoin::getValue(const std::string & date)const
-{
-	std::map<std::string, double>::const_iterator it = bit.find(date);
-	//std::cout << "("<< date << ")";
-
-	if (it != bit.end())
+{	
+	
+	std::map<std::string, double>::const_iterator it = bit.lower_bound(date);
+	if (it == bit.end())
 	{
-		return (it->second);
+		--it;
+		return it->second ;
 	}
-	return(0.00);
+	else if(it == bit.begin())
+	{
+		return it->second ;
+	}else 
+	{
+		std::map<std::string, double>::const_iterator previous = --it;
+		return (date.compare(it->first) < date.compare(previous->first) ? it->second : previous->second) ;
+	}
+}
+
+void	Bitcoin::checkFormatValue(const double & number) const
+{
+	if (number > MAX_INT)
+		throw std::out_of_range("too large a number.");
+	if (number < 0)
+		throw std::out_of_range("not a positive number.");
 }

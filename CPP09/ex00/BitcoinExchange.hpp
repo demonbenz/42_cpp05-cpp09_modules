@@ -2,6 +2,8 @@
 #ifndef BITCOINEXCHANGE_HPP
 #define BITCOINEXCHANGE_HPP
 
+#define MAX_INT 2147483647
+
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
@@ -28,7 +30,8 @@ public:
 	void setKeyValue(const std::string & date, double number);
 	double getValue(const std::string & date)const;
 
-	void printMap();
+	void	checkFormatValue(const double & number) const;
+	void	printMap();
 };
 
 #endif
