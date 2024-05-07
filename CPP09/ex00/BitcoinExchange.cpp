@@ -27,10 +27,8 @@ Bitcoin & Bitcoin::openAndReadCsvFile(const char * fileName, char delim)
 							throw std::runtime_error("bad input. (,)");
 						date = line.substr(0, found);
 						date = trim(date);
-						// std::cout << "key date =<" << date << ">";
 						//checkValidDate(date);
 						number =  std::strtod((line.substr(found + 1)).c_str(), NULL);
-						// std::cout << ", value = <" << number << ">" << std::endl;	
 						setKeyValue(date, number);
 					}
 			}
@@ -69,12 +67,12 @@ Bitcoin & Bitcoin::openAndReadWallet(const char * fileName, char delim)
 					if (line != "")
 					{
 						found = line.find(delim);
-						if (found == std::string::npos && (line != ""))
-							throw std::runtime_error("bad input => ");
 						date = line.substr(0, found);
 						date = trim(date);
 						//std::cout << "trimDate =" << date;
 						checkValidDate(date);
+						if (found == std::string::npos && (line != ""))
+							throw std::runtime_error("bad input");
 						rawNumber = line.substr(found + 1);
 						checkIsNumber(rawNumber);	
 						number =  std::strtod(rawNumber.c_str(), NULL);
@@ -86,9 +84,13 @@ Bitcoin & Bitcoin::openAndReadWallet(const char * fileName, char delim)
 						}
 					}
 				}
+				catch(std::out_of_range & e)
+				{
+					std::cout << "Error: " << e.what() << std::endl;
+				}
 				catch(std::exception & e)
 				{
-					std::cout << "Error: " << e.what() <<std::endl;
+					std::cout << "Error: " << e.what() << " => "<< date << std::endl;
 				}
 			}
 		}
@@ -170,10 +172,10 @@ void	Bitcoin::checkValidDate(const std::string & date)const
 	// checkFormatDate(date);
 	if (date.size() != 10)
 	{
-		throw std::out_of_range("date format error.(size)");
+		throw std::out_of_range("date format error.");
 	}
 	if (date[4] != '-' || date[7] != '-')
-		throw std::out_of_range("date format error.(-)");
+		throw std::out_of_range("date format error.");
 
 	std::string yearStr = date.substr(0, 4);
 	std::string monthStr = date.substr(5, 2);
@@ -182,18 +184,18 @@ void	Bitcoin::checkValidDate(const std::string & date)const
 	
 	int year = std::strtol(yearStr.c_str(),&end,10);
 	if (*end != '\0' || year < 2009)
-		throw std::out_of_range("date format error.(year)");
+		throw std::runtime_error("bad input");
 
 	int month = std::strtol(monthStr.c_str(),&end,10);
 	if (*end != '\0' || month < 1 || month > 12)
-		throw std::out_of_range("date format error.(month)");
+		throw std::runtime_error("bad input");
 
 	int day = std::strtol(dayStr.c_str(),&end,10);
 	if (*end != '\0' || day < 1 || day > 31)
-		throw std::out_of_range("date format error.(day)");
+		throw std::runtime_error("bad input");
 	
 	// checkCalendarDate(date);
 	int daysInMonth[] = {31, 28 + (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     if (day > daysInMonth[month - 1])
-        throw std::out_of_range("date format error.(not in carlendar)");
+        throw std::runtime_error("bad input");
 }
