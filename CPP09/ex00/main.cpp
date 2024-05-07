@@ -1,10 +1,8 @@
 #include "BitcoinExchange.hpp"
 
-// int checkValidDate(std::string & date);
-
 int main(int argc, char *argv[])
 {
-	Bitcoin btc;
+	BitcoinExchange btc;
 
 	if(argc != 2)
 	{

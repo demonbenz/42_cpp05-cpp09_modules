@@ -1,7 +1,9 @@
 #include "BitcoinExchange.hpp"
 
+BitcoinExchange::BitcoinExchange(){}
+BitcoinExchange::~BitcoinExchange(){}
 
-Bitcoin & Bitcoin::openAndReadCsvFile(const char * fileName, char delim)
+BitcoinExchange & BitcoinExchange::openAndReadCsvFile(const char * fileName, char delim)
 {
 	std::ifstream	inF;
 	std::string		date;
@@ -27,7 +29,7 @@ Bitcoin & Bitcoin::openAndReadCsvFile(const char * fileName, char delim)
 							throw std::runtime_error("bad input. (,)");
 						date = line.substr(0, found);
 						date = trim(date);
-						//checkValidDate(date);
+						checkValidDate(date);
 						number =  std::strtod((line.substr(found + 1)).c_str(), NULL);
 						setKeyValue(date, number);
 					}
@@ -42,7 +44,7 @@ Bitcoin & Bitcoin::openAndReadCsvFile(const char * fileName, char delim)
 	}
 }
 
-Bitcoin & Bitcoin::openAndReadWallet(const char * fileName, char delim)
+BitcoinExchange & BitcoinExchange::openAndReadWallet(const char * fileName, char delim)
 {
 	std::ifstream	inF;
 	std::string		date;
@@ -104,7 +106,7 @@ Bitcoin & Bitcoin::openAndReadWallet(const char * fileName, char delim)
 }
 
 
-void Bitcoin::printMap()
+void BitcoinExchange::printMap()
 {
 	std::map<std::string, double>::iterator it = bit.begin();
 	for ( ;it != bit.end(); it++)
@@ -127,11 +129,11 @@ std::string& trim(std::string &str) {
     return ltrim(rtrim(str));
 }
 
-void Bitcoin::setKeyValue(const std::string & date, double number)
+void BitcoinExchange::setKeyValue(const std::string & date, double number)
 {
 	bit.insert(std::pair<std::string, double>(date, number));
 }
-double Bitcoin::getValue(const std::string & date)const
+double BitcoinExchange::getCloseValue(const std::string & date)const
 {	
 	
 	std::map<std::string, double>::const_iterator it = bit.lower_bound(date);
@@ -150,7 +152,17 @@ double Bitcoin::getValue(const std::string & date)const
 	}
 }
 
-void 	Bitcoin::checkIsNumber(const std::string & rawNumber)const
+double BitcoinExchange::getValue(const std::string & date)const
+{
+	std::map<std::string , double>::const_iterator it = bit.find(date);
+	if(it != bit.end())
+	{
+		return(it->second);
+	}
+	return(getCloseValue(date));
+}
+
+void 	BitcoinExchange::checkIsNumber(const std::string & rawNumber)const
 {
 	std::istringstream iss(rawNumber);
 	double num;
@@ -159,7 +171,7 @@ void 	Bitcoin::checkIsNumber(const std::string & rawNumber)const
 		throw std::out_of_range("value is not number.");
 }
 
-void	Bitcoin::checkFormatValue(const double & number) const
+void	BitcoinExchange::checkFormatValue(const double & number) const
 {
 	if (number > MAX_INT)
 		throw std::out_of_range("too large a number.");
@@ -167,7 +179,7 @@ void	Bitcoin::checkFormatValue(const double & number) const
 		throw std::out_of_range("not a positive number.");
 }
 
-void	Bitcoin::checkValidDate(const std::string & date)const
+void	BitcoinExchange::checkValidDate(const std::string & date)const
 {
 	// checkFormatDate(date);
 	if (date.size() != 10)
