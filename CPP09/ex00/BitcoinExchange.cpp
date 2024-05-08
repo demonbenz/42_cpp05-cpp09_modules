@@ -47,6 +47,7 @@ BitcoinExchange & BitcoinExchange::openAndReadCsvFile(const char * fileName, cha
 BitcoinExchange & BitcoinExchange::openAndReadWallet(const char * fileName, char delim)
 {
 	std::ifstream	inF;
+	std::string		rawDate;
 	std::string		date;
 	std::string 	rawNumber;
 	double 			number;
@@ -69,8 +70,8 @@ BitcoinExchange & BitcoinExchange::openAndReadWallet(const char * fileName, char
 					if (line != "")
 					{
 						found = line.find(delim);
-						date = line.substr(0, found);
-						date = trim(date);
+						rawDate = line.substr(0, found);
+						date = trim(rawDate);
 						//std::cout << "trimDate =" << date;
 						checkValidDate(date);
 						if (found == std::string::npos && (line != ""))
@@ -115,18 +116,21 @@ void BitcoinExchange::printMap()
 	}
 }
 
-std::string& ltrim(std::string &str) {
-    str.erase(str.begin(), std::find_if(str.begin(), str.end(), std::not1(std::ptr_fun<int, int>(std::isspace))));
-    return str;
-}
+std::string BitcoinExchange::trim(const std::string & str)
+{
+	int start = 0;
+	int end = str.length();
 
-std::string& rtrim(std::string &str) {
-    str.erase(std::find_if(str.rbegin(), str.rend(), std::not1(std::ptr_fun<int, int>(std::isspace))).base(), str.end());
-    return str;
-}
-
-std::string& trim(std::string &str) {
-    return ltrim(rtrim(str));
+	while(start < end && std::isspace(str[start]))
+	{
+		++start;
+	}
+	
+	while(end > start && std::isspace(str[end - 1]))
+	{
+		--end;
+	}
+	return (str.substr(start, end - start));
 }
 
 void BitcoinExchange::setKeyValue(const std::string & date, double number)

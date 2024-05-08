@@ -12,10 +12,6 @@
 #include <algorithm>
 #include <sstream>
 
-std::string& ltrim(std::string &str);
-std::string& rtrim(std::string &str);
-std::string& trim(std::string &str);
-
 class BitcoinExchange
 {
 private:
@@ -36,6 +32,8 @@ public:
 	void	checkValidDate(const std::string & date) const;
 	void	checkFormatValue(const double & number) const;
 	void	printMap();
+
+	std::string trim(const std::string & str);
 };
 
 #endif
