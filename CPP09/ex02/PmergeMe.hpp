@@ -9,6 +9,8 @@
 #include <vector>
 #include <algorithm>
 #include <sstream>
+#include <ctime>
+#include <iomanip>
 
 class PmergeMe
 {
@@ -21,8 +23,14 @@ public:
 
 	//function member
 	void	checkAndInput(const char* str);
+
 	void	putDataToList(long long num);
+	void	printList();
+	double	sortList();
+
 	void	putDataToVec(long long num);
+	void	printVec();
+	double	sortVec();
 };
 
 #endif
