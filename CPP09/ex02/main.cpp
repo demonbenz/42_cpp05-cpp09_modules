@@ -25,30 +25,25 @@ int main(int argc, char *argv[])
 			}
 
 			std::cout << "Before:  ";
-			pm.printVec(); // print vec before sort
-			
-			timeVec = pm.sortVec(); // sort data in container vector			
-			timeDeque = pm.sortDeque(); // sort data in container Deque
-
-			std::cout << std::endl;
-			std::cout << "After:   ";
-			pm.printVec(); // print sorted data in container
-			
-			// print data summary result of sorting
-			// std::cout << std::endl;
-			// std::cout << "After<Deque>: ";			
-			// pm.printDeque(); // print sorted data in container
+			std::cout << pm.getVec();
+			timeVec = pm.sortVec();		
+			timeDeque = pm.sortDeque();
+			std::cout << std::endl;		
+			std::cout << "After:   ";			
+			std::cout << pm.getVec();
+			// pm.printVec();
+			// pm.printDeque();
 
 			//print time summary in 1st container and 2nd container
 			std::cout << std::endl;
 			std::cout << "Time to process a range of " << num << " elements with std::vector :  ";
-			std::cout << std::fixed << std::setprecision(5) << timeVec << " sec" << std::endl;
+			std::cout << std::fixed << std::setprecision(5) << timeVec << " us" << std::endl;
 			std::cout << "Time to process a range of " << num << " elements with std::Deque  :  ";
-			std::cout << std::fixed << std::setprecision(5) << timeDeque << " sec" << std::endl;
+			std::cout << std::fixed << std::setprecision(5) << timeDeque << " us" << std::endl;
 		}
 		catch(std::exception & e)
 		{
-			std::cout << "Error: " << e.what() << std::endl;
+			std::cerr << "Error: " << e.what() << std::endl;
 			return (1);
 		}
 	}

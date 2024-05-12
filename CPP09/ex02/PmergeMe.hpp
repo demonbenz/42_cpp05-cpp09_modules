@@ -21,8 +21,13 @@ public:
 	PmergeMe();
 	~PmergeMe();
 
+	PmergeMe(const PmergeMe & rhs);
+	PmergeMe & operator=(const PmergeMe & rhs);
+
 	//function member
 	void	checkAndInput(const char* str);
+	std::vector<unsigned int> &		getVec();
+	std::deque<unsigned int> &		getDeque();
 
 	// Deque	
 	void	putDataToDeque(long long num);
@@ -42,5 +47,8 @@ public:
 	void	mergeISSortHelpVec(std::vector<unsigned int> & arr, std::vector<unsigned int> & temp , int left, int right);
 	void	mergeVec(std::vector<unsigned int> & arr,std::vector<unsigned int> & temp, int left, int mid, int right);
 };
+
+std::ostream & operator<<(std::ostream & o, std::vector<unsigned int> const & arr);
+std::ostream & operator<<(std::ostream & o, std::deque<unsigned int> const & arr);
 
 #endif

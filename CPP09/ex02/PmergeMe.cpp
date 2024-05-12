@@ -3,6 +3,31 @@
 PmergeMe::PmergeMe(){}
 PmergeMe::~PmergeMe(){}
 
+PmergeMe::PmergeMe(const PmergeMe & rhs)
+{
+	*this = rhs;
+}
+
+PmergeMe & PmergeMe::operator=(const PmergeMe & rhs)
+{
+	if (this == &rhs)
+		return *this;
+
+	this->_pmDeque = rhs._pmDeque;
+	this->_pmVec = rhs._pmVec;
+	return *this;
+}
+
+std::vector<unsigned int> &	PmergeMe::getVec()
+{
+	return this->_pmVec;
+}
+
+std::deque<unsigned int> &	PmergeMe::getDeque()
+{
+	return this->_pmDeque;
+}
+
 void  PmergeMe::checkAndInput(const char * str)
 {
 	long long num;
@@ -57,10 +82,10 @@ double	PmergeMe::sortVec()
 {
 	clock_t startTime = clock();
 
-	//std::sort(_pmVec.begin(), _pmVec.end());// This is quick sort in <algorithm>
+	// std::sort(_pmVec.begin(), _pmVec.end());// This is quick sort in <algorithm>
 	mergeInsertSortVec(_pmVec);
 	clock_t endTime = clock();
-	double totalTime = static_cast<double>(endTime - startTime) / CLOCKS_PER_SEC;
+	double totalTime = static_cast<double>(endTime - startTime); // CLOCKS_PER_SEC;
 
 	return (totalTime);
 }
@@ -69,10 +94,10 @@ double	PmergeMe::sortDeque()
 {
 	clock_t startTime = clock();
 
-	//std::sort(_pmDeque.begin(), _pmDeque.end()); // this is quick sort in <algorithm>
+	// std::sort(_pmDeque.begin(), _pmDeque.end()); // this is quick sort in <algorithm>
 	mergeInsertSortDeque(_pmDeque);
 	clock_t endTime = clock();
-	double totalTime = static_cast<double>(endTime - startTime) / CLOCKS_PER_SEC;
+	double totalTime = static_cast<double>(endTime - startTime); // CLOCKS_PER_SEC;
 
 	return (totalTime);
 }
@@ -235,4 +260,21 @@ void	PmergeMe::insertionSortDeque(std::deque<unsigned int> & arr)
 		j--;
 		}
 	}
+}
+
+std::ostream & operator<<(std::ostream & o, std::vector<unsigned int> const & arr)
+{
+	for (int i = 0; i < 5; i++)
+		o << arr[i] << " ";
+	if (arr.size() > 5)
+		o << "[...]";
+	return o;
+}
+std::ostream & operator<<(std::ostream & o, std::deque<unsigned int> const & arr)
+{
+	for (int i = 0; i < 5; i++)
+		o << arr[i] << " ";
+	if (arr.size() > 5)
+		o << "[...]";
+	return o;
 }
