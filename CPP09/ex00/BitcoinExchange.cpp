@@ -3,6 +3,11 @@
 BitcoinExchange::BitcoinExchange(){}
 BitcoinExchange::~BitcoinExchange(){}
 
+std::map<std::string, double> const & BitcoinExchange::getMap()const
+{
+	return this->_bit;
+}
+
 BitcoinExchange & BitcoinExchange::openAndReadCsvFile(const char * fileName, char delim)
 {
 	std::ifstream	inF;
@@ -109,8 +114,8 @@ BitcoinExchange & BitcoinExchange::openAndReadWallet(const char * fileName, char
 
 void BitcoinExchange::printMap()
 {
-	std::map<std::string, double>::iterator it = bit.begin();
-	for ( ;it != bit.end(); it++)
+	std::map<std::string, double>::iterator it = _bit.begin();
+	for ( ;it != _bit.end(); it++)
 	{
 		std::cout << "key:-> |" << it->first << "| : value:-> |" << it->second << "|" << std::endl;
 	}
@@ -135,18 +140,18 @@ std::string BitcoinExchange::trim(const std::string & str)
 
 void BitcoinExchange::setKeyValue(const std::string & date, double number)
 {
-	bit.insert(std::pair<std::string, double>(date, number));
+	_bit.insert(std::pair<std::string, double>(date, number));
 }
 double BitcoinExchange::getCloseValue(const std::string & date)const
 {	
 	
-	std::map<std::string, double>::const_iterator it = bit.lower_bound(date);
-	if (it == bit.end())
+	std::map<std::string, double>::const_iterator it = _bit.lower_bound(date);
+	if (it == _bit.end())
 	{
 		--it;
 		return it->second ;
 	}
-	else if(it == bit.begin())
+	else if(it == _bit.begin())
 	{
 		return it->second ;
 	}else 
@@ -158,8 +163,8 @@ double BitcoinExchange::getCloseValue(const std::string & date)const
 
 double BitcoinExchange::getValue(const std::string & date)const
 {
-	std::map<std::string , double>::const_iterator it = bit.find(date);
-	if(it != bit.end())
+	std::map<std::string , double>::const_iterator it = _bit.find(date);
+	if(it != _bit.end())
 	{
 		return(it->second);
 	}
@@ -214,4 +219,33 @@ void	BitcoinExchange::checkValidDate(const std::string & date)const
 	int daysInMonth[] = {31, 28 + (year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
     if (day > daysInMonth[month - 1])
         throw std::runtime_error("bad input");
+}
+
+BitcoinExchange::BitcoinExchange(BitcoinExchange const & rhs) 
+{
+	*this = rhs;
+}
+
+BitcoinExchange & BitcoinExchange::operator=(BitcoinExchange const & rhs) 
+{
+	if (this == &rhs)
+		return *this;
+	this->_bit = rhs._bit;
+	return *this;
+}
+
+std::ostream & operator<<( std::ostream & o, BitcoinExchange const & rhs)
+{
+	o << rhs.getMap();
+	return o;
+}
+
+std::ostream & operator<<( std::ostream & o, std::map<std::string, double> const & rhs)
+{
+	std::map<std::string, double>::const_iterator it = rhs.begin();
+	for (;it != rhs.end(); it++)
+	{
+		o << it->first << " => " << it->second << "\n";
+	}
+	return o;
 }

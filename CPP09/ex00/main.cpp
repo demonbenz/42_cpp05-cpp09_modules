@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
 			return (1);
 		}
 		//btc.printMap();
+		//std::cout << btc.getMap();
 	}
 	return 0;
 }

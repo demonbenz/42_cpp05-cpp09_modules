@@ -15,12 +15,16 @@
 class BitcoinExchange
 {
 private:
-	std::map<std::string, double> bit;
+	std::map<std::string, double> _bit;
 public:
 	BitcoinExchange();
 	~BitcoinExchange();
 
+	BitcoinExchange(BitcoinExchange const & rhs);
+	BitcoinExchange & operator=(BitcoinExchange const & rhs);
+
 	//function member
+	std::map<std::string, double> const & getMap()const;
     BitcoinExchange & openAndReadCsvFile(const char * fileName, char delim);
     BitcoinExchange & openAndReadWallet(const char * fileName, char delim);
 
@@ -35,5 +39,8 @@ public:
 
 	std::string trim(const std::string & str);
 };
+
+std::ostream & operator<<( std::ostream & o, BitcoinExchange const & rhs);
+std::ostream & operator<<( std::ostream & o, std::map<std::string, double> const & rhs);
 
 #endif
