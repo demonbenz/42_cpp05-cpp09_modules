@@ -57,7 +57,7 @@ double	PmergeMe::sortVec()
 {
 	clock_t startTime = clock();
 
-	//std::sort(_pmVec.begin(), _pmVec.end());// This isinsertion sort.
+	//std::sort(_pmVec.begin(), _pmVec.end());// This is quick sort in <algorithm>
 	mergeInsertSortVec(_pmVec);
 	clock_t endTime = clock();
 	double totalTime = static_cast<double>(endTime - startTime) / CLOCKS_PER_SEC;
@@ -69,7 +69,7 @@ double	PmergeMe::sortDeque()
 {
 	clock_t startTime = clock();
 
-	//std::sort(_pmDeque.begin(), _pmDeque.end()); // this is insertion sort
+	//std::sort(_pmDeque.begin(), _pmDeque.end()); // this is quick sort in <algorithm>
 	mergeInsertSortDeque(_pmDeque);
 	clock_t endTime = clock();
 	double totalTime = static_cast<double>(endTime - startTime) / CLOCKS_PER_SEC;
@@ -92,10 +92,10 @@ void	PmergeMe::mergeISSortHelpDeque(std::deque<unsigned int> & arr, std::deque<u
 	{
 		return;
 	}
-	if ((right - left + 1) <= 5)
+	if ((right - left + 1) <= 16)
 	{
 		// this line is use insertion sort if data is <= 5
-		std::sort(arr.begin() + left, arr.begin() + right + 1);
+		insertionSortDeque(arr);
 		return;
 	}
 	int mid = (left + right) / 2;
@@ -148,10 +148,10 @@ void	PmergeMe::mergeISSortHelpVec(std::vector<unsigned int> & arr, std::vector<u
 	{
 		return;
 	}
-	if ((right - left + 1) <= 5)
+	if ((right - left + 1) <= 16)
 	{
 		// this line is use insertion sort if data is <= 5
-		std::sort(arr.begin() + left, arr.begin() + right + 1);
+		insertionSortVec(arr);
 		return;
 	}
 	int mid = (left + right) / 2;
@@ -186,4 +186,53 @@ void	PmergeMe::mergeVec(std::vector<unsigned int> & arr,std::vector<unsigned int
 	{
         arr[left + i] = temp[i];
     }
+}
+
+
+void	PmergeMe::insertionSortVec(std::vector<unsigned int> & arr)
+{
+	unsigned int temp;
+	int j;
+	int size = arr.size();
+	for (int i = 1; i < size; i++)
+	{
+		temp = arr[i];
+		j = i - 1;
+		while(j >= 0){
+			if(temp < arr[j])
+			{
+				arr[j + 1] = arr[j];
+				arr[j] = temp;
+			}
+			else
+			{	
+				break;
+			}
+		j--;
+		}
+	}
+}
+
+void	PmergeMe::insertionSortDeque(std::deque<unsigned int> & arr)
+{
+	unsigned int temp;
+	int j;
+	int size = arr.size();
+	for (int i = 1; i < size; i++)
+	{
+		temp = arr[i];
+		j = i - 1;
+		while(j >= 0){
+			if(temp < arr[j])
+			{
+				arr[j + 1] = arr[j];
+				arr[j] = temp;
+			}
+			else
+			{	
+				break;
+			}
+		j--;
+		}
+	}
 }

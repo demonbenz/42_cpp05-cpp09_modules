@@ -28,6 +28,7 @@ public:
 	void	putDataToDeque(long long num);
 	void	printDeque();
 	double	sortDeque();
+	void	insertionSortDeque(std::deque<unsigned int> & arr);
 	void	mergeInsertSortDeque(std::deque<unsigned int> & arr);
 	void	mergeISSortHelpDeque(std::deque<unsigned int> & arr, std::deque<unsigned int> & temp , int left, int right);
 	void	mergeDeque(std::deque<unsigned int> & arr,std::deque<unsigned int> & temp, int left, int mid, int right);
@@ -36,6 +37,7 @@ public:
 	void	putDataToVec(long long num);
 	void	printVec();
 	double	sortVec();
+	void	insertionSortVec(std::vector<unsigned int> & arr);
 	void	mergeInsertSortVec(std::vector<unsigned int> & arr);
 	void	mergeISSortHelpVec(std::vector<unsigned int> & arr, std::vector<unsigned int> & temp , int left, int right);
 	void	mergeVec(std::vector<unsigned int> & arr,std::vector<unsigned int> & temp, int left, int mid, int right);
