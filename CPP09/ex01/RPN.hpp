@@ -10,17 +10,23 @@
 class RPN
 {
 private:
-	std::stack<int>	rpn;
+	std::stack<int>	_rpn;
 public:
 	RPN();
 	~RPN();
 
+	RPN(RPN const & rhs);
+	RPN & operator=(RPN const & rhs);
+
 	//function member
 	void	checkData(const char* argv);
 	void	calculate(const char* argv);
-
 	void	putStack(char c);
 	void	popStack(char c);
+	std::stack<int> const & getStack()const;
 };
+
+std::ostream & operator<<(std::ostream & o, RPN const & rhs);
+std::ostream & operator<<(std::ostream & o, std::stack<int> const & rhs);
 
 #endif

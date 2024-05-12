@@ -2,7 +2,7 @@
 
 int main(int argc, char *argv[])
 {
-	RPN	rpn;
+	RPN	rpnObj;
 
 	if(argc != 2)
 	{
@@ -13,12 +13,12 @@ int main(int argc, char *argv[])
 	{
 		try
 		{
-			rpn.checkData(argv[1]);
-			rpn.calculate(argv[1]);
+			rpnObj.checkData(argv[1]);
+			rpnObj.calculate(argv[1]);
 		}
 		catch(std::exception & e)
 		{
-			std::cout << "Error: " << e.what() << std::endl;
+			std::cerr << "Error: " << e.what() << std::endl;
 			return (1);
 		}
 	}
